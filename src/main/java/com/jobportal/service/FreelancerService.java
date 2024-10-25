@@ -32,6 +32,7 @@ public class FreelancerService {
     private FreelancerJobMappingRepository freelancerJobMappingRepository;
 
 
+    // This method creates a new freelancer profile for a user.
     public String createFreelancer(FreelancerDto dto, String username) {
         User user = userService.findUserByUsername(username);
         if(user.getRole().equalsIgnoreCase("Freelancer")) {
@@ -51,6 +52,7 @@ public class FreelancerService {
         }
     }
 
+    //This method updates an existing freelancer profile.
     public String updateFreelancer(String username, FreelancerDto freelancerDto) {
         User user = userService.findUserByUsername(username);
         Freelancer freelancerEntity = freelancerRepository.findByUserId(user.getId())
@@ -67,11 +69,13 @@ public class FreelancerService {
 
     }
 
+    //This method retrieves all freelancer profiles.
     public List<FreelancerDto> getAllFreelancers() {
         List<Freelancer> freelancers = freelancerRepository.findAll();
         return freelancerVisibilityService.getVisibilityOfFreelancers(freelancers);
     }
 
+    //This method applies for a job.
     public String applyForJob(String username, Long jobId) {
         User user = userService.findUserByUsername(username);
         if(user.getRole().equalsIgnoreCase("Freelancer")) {
@@ -95,6 +99,7 @@ public class FreelancerService {
         }
     }
 
+    //This method retrieves freelancers by their IDs.
     public List<FreelancerDto> getFreelancersByIds(List<Long> employeeIds) {
         List<Freelancer> freelancers = freelancerRepository.findByFreelancerIdIn(employeeIds);
         return freelancerVisibilityService.getVisibilityOfFreelancers(freelancers);

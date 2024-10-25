@@ -23,6 +23,12 @@ public class FreelancerVisibilityService {
     @Autowired
     FreelancerVisibilityRepository freelancerVisibilityRepository;
 
+    /**
+ * Retrieves the visibility settings for a list of freelancers.
+ *
+ * @param freelancers The list of freelancers.
+ * @return A list of FreelancerDto objects representing the visibility settings for each freelancer.
+ */
     public List<FreelancerDto> getVisibilityOfFreelancers(List<Freelancer> freelancers) {
         return freelancers.stream()
                 .map(freelancer -> {
@@ -42,7 +48,14 @@ public class FreelancerVisibilityService {
                 .collect(Collectors.toList());
     }
 
+/**
+ * Fetches the skills for a given freelancer.
+ *
+ * @param freelancerId The ID of the freelancer.
+ * @return A list of skills for the freelancer.
+ */
     private List<String> fetchSkillsForFreelancer(Long freelancerId) {
         return freelancerSkillMappingService.getSkillsForFreelancer(freelancerId);
     }
+
 }

@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:3686182954.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:243622251.
+
 @RestController
 @RequestMapping("/api/employer")
 @CrossOrigin(origins = "http://localhost:3000/")
@@ -25,6 +28,14 @@ public class EmployerController {
     @Autowired
     private JwtUtil util;
 
+    /**
+     * Creates a new employer.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param employer           The employer DTO object containing the employer details.
+     * @return A ResponseEntity with the created employer's username in the body if successful,
+     * or with an UNAUTHORIZED status and error message if failed.
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createEmployer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody EmployerDto employer) {
         try {
@@ -35,6 +46,14 @@ public class EmployerController {
         }
     }
 
+    /**
+     * Updates an existing employer.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param employer           The employer DTO object containing the updated employer details.
+     * @return A ResponseEntity with the updated employer's username in the body if successful,
+     * or with an UNAUTHORIZED status and error message if failed.
+     */
     @PutMapping("/update")
     public ResponseEntity<String> updateEmployer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody EmployerDto employer) {
         try {
@@ -45,6 +64,13 @@ public class EmployerController {
         }
     }
 
+    /**
+     * Deletes an employer.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @return A ResponseEntity with a success message in the body if successful,
+     * or with an UNAUTHORIZED status and error message if failed.
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteEmployer(@RequestHeader("Authorization") String authorizationHeader) {
         try {
@@ -55,6 +81,14 @@ public class EmployerController {
         }
     }
 
+    /**
+     * Retrieves a list of jobs posted by an employer.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param id                  An optional ID to filter the jobs by.
+     * @return A ResponseEntity with a list of JobDto objects in the body if successful,
+     * or with an UNAUTHORIZED status and null body if failed.
+     */
     @GetMapping("/getJobs")
     public ResponseEntity<List<JobDto>> getPostedJobs(@RequestHeader("Authorization") String authorizationHeader,
                                                       @RequestParam(value = "id", required = false) Long id) {
@@ -70,6 +104,14 @@ public class EmployerController {
 
     }
 
+    /**
+     * Posts a new job.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param jobDto              The JobDto object containing the job details.
+     * @return A ResponseEntity with a success message in the body if successful,
+     * or with an UNAUTHORIZED status and error message if failed.
+     */
     @PostMapping("/postJob")
     public ResponseEntity<String> postJob(@RequestHeader("Authorization") String authorizationHeader, @RequestBody JobDto jobDto) {
         try {

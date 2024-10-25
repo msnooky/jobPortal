@@ -18,6 +18,13 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    /**
+     * Handles the login request.
+     * 
+     * @param loginData A map containing the user's email and password.
+     * @return A ResponseEntity containing a token if authentication is successful, 
+     *         or an error message if authentication fails.
+     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> loginData) {
         try {
@@ -34,6 +41,13 @@ public class AuthenticationController {
         }
     }
 
+    /**
+     * Handles the signup request.
+     * 
+     * @param userDto A UserDto object containing the user's registration information.
+     * @return A ResponseEntity containing a success message and a token if registration 
+     *         is successful, or an error message if registration fails.
+     */
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>> signup(@RequestBody UserDto userDto) {
         try {

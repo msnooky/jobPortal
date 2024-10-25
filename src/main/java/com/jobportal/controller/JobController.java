@@ -22,6 +22,12 @@ public class JobController {
     @Autowired
     private JwtUtil util;
 
+    /**
+     * Retrieves all jobs for the authenticated user.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @return ResponseEntity with a list of JobDto objects or an error message.
+     */
     @GetMapping("/getJobs")
     public ResponseEntity<List<JobDto>> getJobs(@RequestHeader("Authorization") String authorizationHeader) {
         try {
@@ -32,6 +38,13 @@ public class JobController {
         }
     }
 
+    /**
+     * Retrieves all applicants for a specific job.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param jobId              The ID of the job.
+     * @return ResponseEntity with a list of FreelancerDto objects or an error message.
+     */
     @GetMapping("/getApplicants")
     public ResponseEntity<List<FreelancerDto>> getApplicants(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Long jobId) {
         try {
@@ -42,6 +55,13 @@ public class JobController {
         }
     }
 
+    /**
+     * Searches for jobs based on the provided search criteria.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param searchDto           The search criteria.
+     * @return ResponseEntity with a list of JobDto objects or an error message.
+     */
     @PostMapping("/searchJob")
     public ResponseEntity<List<JobDto>> searchJobs(@RequestHeader("Authorization") String authorizationHeader, @RequestBody SearchDto searchDto) {
         try {
@@ -52,6 +72,12 @@ public class JobController {
         }
     }
 
+    /**
+     * Extracts the username from the authorization header.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @return The extracted username.
+     */
     private String getUsername(String authorizationHeader) {
         String jwt = authorizationHeader.substring(7);
         return util.extractUsername(jwt);
