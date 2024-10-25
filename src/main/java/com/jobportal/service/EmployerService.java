@@ -174,4 +174,9 @@ public class EmployerService {
         return freelancerService.getFreelancersByIds(employeeIds);
     }
 
+    private Employer getEmployerByEmployerId(Long employerId) {
+        return employerRepository.findByUserId(employerId)
+                .orElseThrow(() -> new RuntimeException("Unauthorized as an employer"));
+    }
+
 }
