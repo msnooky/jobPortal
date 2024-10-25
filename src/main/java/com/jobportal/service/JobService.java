@@ -36,6 +36,12 @@ public class JobService {
     @Autowired
     private FreelancerJobMappingRepository freelancerJobMappingRepository;
 
+    /**
+     * Creates a new job with the given details and skills.
+     *
+     * @param job    The job object containing job details.
+     * @param skills A list of skills associated with the job.
+     */
     public void createJob(Job job, List<String> skills) {
         jobRepository.save(job);
         List<JobSkillMapping> jobSkillMappings = skills.stream()
@@ -49,6 +55,13 @@ public class JobService {
         jobSkillMappingRepository.saveAll(jobSkillMappings);
     }
 
+    /**
+     * Searches for jobs based on the provided search criteria.
+     *
+     * @param username   The username of the user performing the search.
+     * @param searchDto The search criteria object.
+     * @return A list of JobDto objects representing the matching jobs.
+     */
     public List<JobDto> searchJobs(String username, SearchDto searchDto) {
         User user = userService.findUserByUsername(username);
         if (user.getRole().equalsIgnoreCase("Freelancer")) {
@@ -74,6 +87,13 @@ public class JobService {
         }
     }
 
+    /**
+     * Filters jobs based on the provided skills.
+     *
+     * @param skills The list of skills to filter by.
+     * @param jobs   The initial list of jobs to filter.
+     * @return A list of jobs that match the provided skills.
+     */
     private List<Job> filterJobsWithSkills(List<String> skills, List<Job> jobs) {
         List<Long> jobIds = jobSkillMappingRepository.findAllBySkillIn(skills);
         return jobRepository.findAllByJobIdIn(jobIds).stream()
@@ -81,12 +101,26 @@ public class JobService {
                         .equals(job.getJobId()))).collect(Collectors.toList());
     }
 
+    /**
+     * Filters jobs based on the provided location.
+     *
+     * @param location The location to filter by.
+     * @param jobs     The initial list of jobs to filter.
+     * @return A list of jobs that match the provided location.
+     */
     private List<Job> filterJobsWithLocation(String location, List<Job> jobs) {
         return jobRepository.findByLocation(location).stream()
                 .filter(job -> jobs.stream().anyMatch(newJob -> newJob.getJobId()
                         .equals(job.getJobId()))).collect(Collectors.toList());
     }
 
+    /**
+     * Filters jobs within the specified salary range.
+     *
+     * @param searchDto The search criteria object containing salary range.
+     * @param jobs      The initial list of jobs to filter.
+     * @return A list of jobs that fall within the specified salary range.
+     */
     private List<Job> filterJobsInSalaryRange(SearchDto searchDto, List<Job> jobs) {
         Long minSalary = searchDto.getMinSalary().orElse(0L);
         ;
@@ -96,6 +130,14 @@ public class JobService {
                         .equals(job.getJobId()))).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves a list of freelancer DTOs representing the applicants for a specific job.
+     *
+     * @param username The username of the user requesting the applicants.
+     * @param jobId    The ID of the job for which to retrieve applicants.
+     * @return A list of freelancer DTOs representing the applicants for the job.
+     * @throws RuntimeException If the user is not authorized as an employer or if the employer is not authorized to access the job.
+     */
     public List<FreelancerDto> getApplicants(String username, Long jobId) {
         User user = userService.findUserByUsername(username);
         if (user.getRole().equalsIgnoreCase("Employer")) {
@@ -120,10 +162,24 @@ public class JobService {
         }
     }
 
+    /**
+     * Finds all freelancers by their IDs.
+     *
+     * @param freelancerIds A list of freelancer IDs.
+     * @return A list of freelancers matching the provided IDs.
+     */
     private List<Freelancer> findAllFreelancersByIds(List<Long> freelancerIds) {
         return freelancerRepository.findAllById(freelancerIds);
     }
 
+    /**
+     * Deletes a job.
+     *
+     * @param employer The employer attempting to delete the job.
+     * @param id       The ID of the job to delete.
+     * @return A message indicating the success or failure of the deletion.
+     * @throws RuntimeException If the employer is not authorized to delete the job.
+     */
     public String deleteJob(Employer employer, Long id) {
         Optional<Job> job = jobRepository.findById(id);
         if (Objects.equals(employer.getEmployerId(), job.get().getEmployerId())) {
@@ -135,10 +191,23 @@ public class JobService {
         }
     }
 
+    /**
+     * Retrieves all jobs associated with a specific employer ID.
+     *
+     * @param employerId The ID of the employer.
+     * @return A list of jobs associated with the employer ID.
+     */
     public List<Job> getJobsByEmployerId(Long employerId) {
         return jobRepository.findAllByEmployerId(employerId);
     }
 
+    /**
+     * Retrieves all jobs as DTOs, accessible only to freelancers.
+     *
+     * @param username The username of the user requesting the jobs.
+     * @return A list of job DTOs representing all available jobs.
+     * @throws RuntimeException If the user is not authorized as a freelancer.
+     */
     public List<JobDto> getAllJobs(String username) {
         User user = userService.findUserByUsername(username);
         if (user.getRole().equalsIgnoreCase("Freelancer")) {
@@ -155,6 +224,12 @@ public class JobService {
         }
     }
 
+    /**
+     * Retrieves a list of skills associated with a specific job ID.
+     *
+     * @param jobId The ID of the job.
+     * @return A list of skills associated with the job ID.
+     */
     public List<String> getJobSkills(Long jobId) {
         return jobSkillMappingRepository.findByJobId(jobId)
                 .stream()

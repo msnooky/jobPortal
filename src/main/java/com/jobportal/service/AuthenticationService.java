@@ -23,6 +23,12 @@ public class AuthenticationService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * Registers a new user.
+     *
+     * @param userDto The user DTO containing the user's information.
+     * @throws Exception If the email is already in use.
+     */
     public void registerUser(UserDto userDto) throws Exception {
         Optional<User> user = userService.checkUserPresence(userDto.getEmail());
         if (user.isPresent()) {
@@ -37,6 +43,14 @@ public class AuthenticationService {
         userService.saveNewUser(newUser);
     }
 
+    /**
+     * Authenticates a user.
+     *
+     * @param email    The user's email.
+     * @param password The user's password.
+     * @return The JWT token if the credentials are valid.
+     * @throws RuntimeException If the credentials are invalid.
+     */
     public String authenticate(String email, String password) {
         User user = userService.findUserByEmail(email);
         if (user.getPassword().equals(password)) {

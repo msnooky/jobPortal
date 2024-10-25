@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:2100421316.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:763927218.
+
 @RestController
 @RequestMapping("/api/freelancer")
 @CrossOrigin(origins = "http://localhost:3000/")
@@ -19,6 +22,13 @@ public class FreelancerController {
     @Autowired
     private JwtUtil util;
 
+    /**
+     * Creates a new freelancer profile.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param freelancer         The FreelancerDto object containing the freelancer details.
+     * @return ResponseEntity with the created freelancer's username or an error message.
+     */
     @PostMapping("/create")
     public ResponseEntity<String> createFreelancer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody FreelancerDto freelancer) {
         try {
@@ -30,6 +40,13 @@ public class FreelancerController {
 
     }
 
+    /**
+     * Updates an existing freelancer profile.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param freelancer         The FreelancerDto object containing the updated freelancer details.
+     * @return ResponseEntity with a success message or an error message.
+     */
     @PutMapping("/update")
     public ResponseEntity<String> updateFreelancer(@RequestHeader("Authorization") String authorizationHeader, @RequestBody FreelancerDto freelancer) {
         try {
@@ -40,6 +57,13 @@ public class FreelancerController {
         }
     }
 
+    /**
+     * Allows a freelancer to apply for a job.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @param jobId              The ID of the job to apply for.
+     * @return ResponseEntity with a success message or an error message.
+     */
     @PostMapping("/applyJob")
     public ResponseEntity<String> applyJob(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Long jobId) {
         try {
@@ -50,6 +74,12 @@ public class FreelancerController {
         }
     }
 
+    /**
+     * Extracts the username from the authorization header.
+     *
+     * @param authorizationHeader The authorization header containing the JWT token.
+     * @return The extracted username.
+     */
     private String getUsername(String authorizationHeader) {
         String jwt = authorizationHeader.substring(7);
         return util.extractUsername(jwt);

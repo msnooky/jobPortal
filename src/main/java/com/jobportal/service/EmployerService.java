@@ -36,6 +36,13 @@ public class EmployerService {
     @Autowired
     private EmployerEmployeeMappingRepository employerEmployeeMappingRepository;
 
+    /**
+     * Creates a new employer.
+     *
+     * @param employerDto The employer data transfer object.
+     * @param username The username of the user creating the employer.
+     * @return A message indicating whether the employer was created successfully.
+     */
     public String createEmployer(EmployerDto employerDto, String username) {
         User user = userService.findUserByUsername(username);
         if (user.getRole().equalsIgnoreCase("Employer")) {
@@ -54,6 +61,13 @@ public class EmployerService {
         }
     }
 
+    /**
+     * Updates an existing employer.
+     *
+     * @param employerDto The employer data transfer object.
+     * @param username The username of the user updating the employer.
+     * @return A message indicating whether the employer was updated successfully.
+     */
     public String updateEmployer(EmployerDto employerDto, String username) {
         User user = userService.findUserByUsername(username);
         Employer newEmployer = getEmployerByEmployerId(user.getId());
@@ -63,6 +77,12 @@ public class EmployerService {
 
     }
 
+    /**
+     * Gets a list of jobs posted by an employer.
+     *
+     * @param username The username of the employer.
+     * @return A list of job data transfer objects.
+     */
     public List<JobDto> getEmployerJobs(String username) {
         User user = userService.findUserByUsername(username);
         if (user.getRole().equalsIgnoreCase("Employer")) {
@@ -81,6 +101,12 @@ public class EmployerService {
         }
     }
 
+    /**
+     * Deletes an employer.
+     *
+     * @param username The username of the employer to delete.
+     * @return A message indicating whether the employer was deleted successfully.
+     */
     public String deleteEmployer(String username) {
         User user = userService.findUserByUsername(username);
         userService.deleteEmployer(user.getId());
@@ -89,6 +115,13 @@ public class EmployerService {
         return "Successfully Deleted";
     }
 
+    /**
+     * Posts a new job.
+     *
+     * @param username The username of the user posting the job.
+     * @param jobDto The job data transfer object.
+     * @return A message indicating whether the job was posted successfully.
+     */
     public String postJobs(String username, JobDto jobDto) {
         User user = userService.findUserByUsername(username);
         Employer employer = getEmployerByEmployerId(user.getId());
@@ -107,6 +140,13 @@ public class EmployerService {
         }
     }
 
+    /**
+     * Deletes a job.
+     *
+     * @param username The username of the user deleting the job.
+     * @param jobId The ID of the job to delete.
+     * @return A message indicating whether the job was deleted successfully.
+     */
     public String deleteJob(String username, Long jobId) {
         User user = userService.findUserByUsername(username);
         Employer employer = getEmployerByEmployerId(user.getId());
@@ -138,4 +178,5 @@ public class EmployerService {
         return employerRepository.findByUserId(employerId)
                 .orElseThrow(() -> new RuntimeException("Unauthorized as an employer"));
     }
+
 }
